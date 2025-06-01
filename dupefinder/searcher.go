@@ -16,4 +16,5 @@ type FolderData struct {
 type FileData struct {
 	Data
 	Size int64
+	Extension string
 }
