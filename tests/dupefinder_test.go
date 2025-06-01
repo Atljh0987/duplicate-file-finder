@@ -5,6 +5,8 @@ import (
 	h "duplicate-file-finder/tests/testhelpers"
 	fp "path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var resourcePath = h.GetResourcePath()
@@ -15,11 +17,18 @@ func TestIsFolder(t *testing.T) {
 
 	result := searcher.CollectAll(path)
 
-	if len(result.Folders) != 1 {
-		t.Errorf("Have been found %d folders instead of one", len(result.Folders))
-	}
+	assert.Equal(t, 0, len(result.Files))
+	assert.Equal(t, 1, len(result.Folders))
+	assert.Equal(t, fp.Join(path, "TestFolder"), result.Folders[0].Path)
+}
 
-	if result.Folders[0].Path != fp.Join(path, "TestFolder") {
-		t.Errorf("Path must be %s, but was %s", fp.Join(path, "TestFolder"), result.Folders[0].Path)
-	}
+func TestIsFile(t *testing.T) {
+	var searcher sh.Searcher = sh.Default{}
+	var path = fp.Join(resourcePath, "TestIsFile")
+
+	result := searcher.CollectAll(path)
+
+	assert.Equal(t, 1, len(result.Files))
+	assert.Equal(t, 0, len(result.Folders))
+	assert.Equal(t, fp.Join(path, "1.txt"), result.Files[0].Path)
 }
