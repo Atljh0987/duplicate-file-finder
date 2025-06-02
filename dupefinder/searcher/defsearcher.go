@@ -1,7 +1,7 @@
 package searcher
 
 import (
-	df "duplicate-file-finder/dupefinder"
+	"duplicate-file-finder/dupefinder/storage"
 	nf "duplicate-file-finder/dupefinder/notifier"
 	"os"
 	fp "path/filepath"
@@ -14,10 +14,10 @@ var notifier nf.Notifier = nf.ConsoleNotifier{}
 type Default struct {
 }
 
-func (d Default) CollectAll(root string) df.ScanResult {
+func (d Default) CollectAll(root string) storage.ScanResult {
 	entries, err := os.ReadDir(root)
 
-	var scanResult = df.ScanResult{}
+	var scanResult = storage.ScanResult{}
 
 	if err != nil {
 		notifier.NotifyError(err)
@@ -35,9 +35,9 @@ func (d Default) CollectAll(root string) df.ScanResult {
 	return scanResult
 }
 
-func (d Default) CollectAllDeep(root string) []df.FileData {
-	foldersQueue := workqueue.DefaultQueue[df.FolderData]()
-	files := []df.FileData{}
+func (d Default) CollectAllDeep(root string) []storage.FileData {
+	foldersQueue := workqueue.DefaultQueue[storage.FolderData]()
+	files := []storage.FileData{}
 
 	result := d.CollectAll(root)
 
@@ -60,31 +60,31 @@ func (d Default) CollectAllDeep(root string) []df.FileData {
 	return files
 }
 
-func dirToFile(path string, direntry os.DirEntry) df.FileData {
+func dirToFile(path string, direntry os.DirEntry) storage.FileData {
 	var info, err = direntry.Info()
 
 	if err != nil {
 		notifier.NotifyError(err)
-		return df.FileData{}
+		return storage.FileData{}
 	}
 
-	return df.FileData{
-		Data:      df.Data{Path: fp.Join(path, info.Name())},
+	return storage.FileData{
+		Data:      storage.Data{Path: fp.Join(path, info.Name())},
 		Size:      info.Size(),
 		Extension: getExtension(info.Name()),
 	}
 }
 
-func dirToFolder(path string, direntry os.DirEntry) df.FolderData {
+func dirToFolder(path string, direntry os.DirEntry) storage.FolderData {
 	var info, err = direntry.Info()
 
 	if err != nil {
 		notifier.NotifyError(err)
-		return df.FolderData{}
+		return storage.FolderData{}
 	}
 
-	return df.FolderData{
-		Data: df.Data{Path: fp.Join(path, info.Name())},
+	return storage.FolderData{
+		Data: storage.Data{Path: fp.Join(path, info.Name())},
 	}
 }
 

@@ -13,6 +13,7 @@ require (
 )
 
 require (
+	github.com/cespare/xxhash v1.1.0
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3
 	github.com/pmezard/go-difflib v1.0.0 // indirect

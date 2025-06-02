@@ -1,8 +1,8 @@
 package searcher
 
-import df "duplicate-file-finder/dupefinder"
+import "duplicate-file-finder/dupefinder/storage"
 
 type Searcher interface {
-	CollectAll(root string) df.ScanResult
-	CollectAllDeep(root string) []df.FileData
+	CollectAll(root string) storage.ScanResult
+	CollectAllDeep(root string) []storage.FileData
 }
