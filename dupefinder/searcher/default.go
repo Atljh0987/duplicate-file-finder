@@ -6,7 +6,6 @@ import (
 	"os"
 	fp "path/filepath"
 	"strings"
-
 	"k8s.io/client-go/util/workqueue"
 )
 
