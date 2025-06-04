@@ -5,6 +5,7 @@ import (
 	"duplicate-file-finder/dupefinder/storage"
 	"io"
 	"os"
+
 	"github.com/cespare/xxhash"
 )
 
@@ -16,10 +17,9 @@ func (e DefaultEncryptor) Encrypt(hash storage.HashType, files []storage.FileDat
 
 func xxhashEncode(files []storage.FileData) []storage.FileData {
 	hasher := xxhash.New()
+	resData := []storage.FileData{}
 
-	for i := range files {
-		fileData := &files[i]
-		
+	for _, fileData := range files {
 		file, err := os.Open(fileData.Path)
 		if err != nil {
 			notifier.Notifier.NotifyError(notifier.ConsoleNotifier{}, err)
@@ -36,8 +36,10 @@ func xxhashEncode(files []storage.FileData) []storage.FileData {
 		fileData.Hash.HashType = storage.XXHash
 		fileData.Hash.HashData = hasher.Sum64()
 
+		resData = append(resData, fileData)
+
 		hasher.Reset()
 	}
 
-	return files
+	return resData
 }
