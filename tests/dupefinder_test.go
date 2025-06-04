@@ -63,6 +63,33 @@ func TestFileSizeFilter(t *testing.T) {
 	assert.Equal(t, 5, len(sameSize))
 }
 
+func TestFileSizeFilter2(t *testing.T) {
+	var path = fp.Join(resourcePath, "TestHashFileInvalid")
+
+	allFiles := sh.Searcher.CollectAllDeep(sh.Default{}, path)
+	sameSize := analyzer.Filter.SameSize(analyzer.DefaultFilter{}, allFiles)
+
+	assert.Equal(t, 2, len(sameSize))
+}
+
+func TestHashFileInvalid(t *testing.T) {
+	var path = fp.Join(resourcePath, "TestHashFileInvalid")
+
+	allFiles := sh.Searcher.CollectAllDeep(sh.Default{}, path)
+	sameSize := analyzer.Filter.SameHash(analyzer.DefaultFilter{}, allFiles)
+
+	assert.Equal(t, 0, len(sameSize))
+}
+
+func TestHashFileValid(t *testing.T) {
+	var path = fp.Join(resourcePath, "TestHashFileValid")
+
+	allFiles := sh.Searcher.CollectAllDeep(sh.Default{}, path)
+	sameSize := analyzer.Filter.SameHash(analyzer.DefaultFilter{}, allFiles)
+
+	assert.Equal(t, 2, len(sameSize))
+}
+
 func TestFileExtensionFilter(t *testing.T) {
 	var path = fp.Join(resourcePath, "TestFileExtensionFilter")
 
